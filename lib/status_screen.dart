@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
+import 'brand.dart';
 import 'l10n/app_localizations.dart';
 
 class StatusScreen extends StatefulWidget {
@@ -31,7 +32,7 @@ class _StatusScreenState extends State<StatusScreen> {
   }
 
   Future<void> _emailLogs() async {
-    await bg.Logger.emailLog("support@traccar.org", bg.SQLQuery(
+    await bg.Logger.emailLog(RiverTechBrand.supportEmail, bg.SQLQuery(
       order: bg.SQLQuery.ORDER_DESC,
       limit: 25000,
     ));

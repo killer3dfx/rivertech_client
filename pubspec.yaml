@@ -1,5 +1,5 @@
-name: traccar_client
-description: "Traccar Client"
+name: rivertech_client
+description: "RiverTech Client"
 publish_to: 'none'
 version: 9.7.19+136
 

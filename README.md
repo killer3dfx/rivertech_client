@@ -1,35 +1,31 @@
-# [Traccar Client app](https://www.traccar.org/client)
+# RiverTech Client
 
-[![Get it on Google Play](http://www.tananaev.com/badges/google-play.svg)](https://play.google.com/store/apps/details?id=org.traccar.client) [![Download on the App Store](http://www.tananaev.com/badges/app-store.svg)](https://itunes.apple.com/app/traccar-client/id843156974)
+RiverTech Client turns an Android or iOS phone into a lightweight mobile gateway for RiverTech deployments. It runs in the background, captures device GPS telemetry, and sends location updates to the configured tracking server.
 
-## Overview
+This project is based on the open-source Traccar Client app and keeps the same core tracking foundation while introducing RiverTech branding and a gateway-oriented product direction.
 
-Traccar Client is a GPS tracking app for Android and iOS. It runs in the background and sends location updates to your own server using the open-source Traccar platform.
+## Current Capabilities
 
-- **Real-time Tracking**: See your device’s location on your private server in real time.
-- **Open-Source**: 100% free and open-source, with no ads or tracking.
-- **Customizable**: Configure update intervals, accuracy, and data usage to fit your needs.
-- **Privacy First**: Your location data is sent only to your chosen server—never to third parties.
-- **Easy Integration**: Designed to work seamlessly with the Traccar server and many third-party GPS tracking platforms.
+- Background GPS tracking on Android and iOS.
+- Configurable device identifier and server endpoint.
+- Offline buffering for network gaps.
+- QR-based configuration import.
+- Quick actions for starting, stopping, and sending SOS updates.
+- Local log review and support export.
 
-Just enter your server address, grant location permissions, and the app will automatically send periodic location reports in the background.
+## RiverTech Direction
 
-## Team
+The next product layer is to make the phone act as a field gateway for vessel and remote-site data. Planned integration areas include Bluetooth sensors, local network inputs, and marine data protocols such as NMEA.
 
-- Anton Tananaev ([anton@traccar.org](mailto:anton@traccar.org))
+## Development
 
-## License
+```sh
+flutter pub get
+flutter analyze
+```
 
-    Apache License, Version 2.0
+Firebase, signing credentials, bundle identifiers, and production server defaults should be configured for the final RiverTech release environment.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+## Credits
 
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+Original application foundation by Anton Tananaev and the Traccar project. See `LICENSE.txt` for licensing details.

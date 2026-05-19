@@ -26,7 +26,7 @@ struct StopTrackingIntent: AppIntent {
 }
 
 @available(iOS 16.0, *)
-struct TraccarShortcuts: AppShortcutsProvider {
+struct RiverTechShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: StartTrackingIntent(),

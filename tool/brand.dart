@@ -1,9 +1,9 @@
 import 'dart:io';
 
-const appName = 'ACME Client';
-const packageId = 'com.acme.client';
+const appName = 'RiverTech Client';
+const packageId = 'com.rivertech.client';
 const version = '1.0.0+1';
-const url = "https://example.com";
+const url = "https://rivertech.example.com";
 final iconPath = '${Platform.environment['HOME']}/Downloads/icon.png';
 
 const keystoreFilePath = 'android/android.keystore';
@@ -84,7 +84,7 @@ Future<void> _updateVersion(String version) async {
 Future<void> _updateUrl(String url) async {
   await _replaceInFile(
     'lib/preferences.dart',
-    RegExp(r'http://demo\.traccar\.org:5055'),
+    RegExp(r'https://rivertech\.example\.com'),
     url,
   );
 }

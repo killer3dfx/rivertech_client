@@ -86,33 +86,55 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Image.asset(
+                'assets/brand/rivertech_logo.png',
+                height: 42,
+                fit: BoxFit.contain,
+                alignment: Alignment.centerLeft,
+              ),
+            ),
+            const SizedBox(height: 18),
+            Text(
+              RiverTechBrand.gatewayName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              RiverTechBrand.appName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
+            ),
+            const SizedBox(height: 18),
             Row(
               children: [
-                const RiverTechMark(size: 46),
-                const SizedBox(width: 14),
+                const RiverTechMark(
+                  size: 42,
+                  foregroundColor: Colors.white,
+                  accentColor: RiverTechBrand.mist,
+                ),
+                const SizedBox(width: 12),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        RiverTechBrand.gatewayName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        RiverTechBrand.appName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-                      ),
-                    ],
+                  child: Text(
+                    AppLocalizations.of(context)!.disclosureMessage,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.white70),
                   ),
                 ),
               ],
@@ -178,7 +200,7 @@ class _MainScreenState extends State<MainScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: RiverTechBrand.aqua, size: 18),
+            Icon(icon, color: RiverTechBrand.mist, size: 18),
             const SizedBox(width: 8),
             Flexible(
               child: Column(

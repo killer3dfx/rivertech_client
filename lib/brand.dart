@@ -5,23 +5,24 @@ class RiverTechBrand {
   static const gatewayName = 'RiverTech Gateway';
   static const supportEmail = 'support@rivertech.com';
 
-  static const deepWater = Color(0xFF082F3A);
-  static const harborBlue = Color(0xFF0D5C73);
-  static const signalTeal = Color(0xFF1FB6A6);
-  static const aqua = Color(0xFF7FE3D7);
-  static const amber = Color(0xFFE6A83A);
+  static const deepWater = Color(0xFF102870);
+  static const harborBlue = Color(0xFF1038B0);
+  static const signalBlue = Color(0xFF3860D8);
+  static const mist = Color(0xFFEAF1FF);
+  static const ice = Color(0xFFF7FAFF);
+  static const accent = Color(0xFF6F8BFF);
 
   static ThemeData theme(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
     final scheme =
         ColorScheme.fromSeed(
-          seedColor: signalTeal,
+          seedColor: signalBlue,
           brightness: brightness,
         ).copyWith(
-          primary: isDark ? aqua : harborBlue,
-          secondary: signalTeal,
-          tertiary: amber,
-          surface: isDark ? const Color(0xFF0E1F25) : const Color(0xFFF4F8F8),
+          primary: isDark ? mist : harborBlue,
+          secondary: signalBlue,
+          tertiary: accent,
+          surface: isDark ? const Color(0xFF081A4A) : ice,
         );
 
     return ThemeData(
@@ -43,11 +44,11 @@ class RiverTechBrand {
       cardTheme: CardThemeData(
         elevation: 0,
         margin: EdgeInsets.zero,
-        color: isDark ? const Color(0xFF10282F) : Colors.white,
+        color: isDark ? const Color(0xFF0C205C) : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(
-            color: isDark ? Colors.white10 : const Color(0xFFE0E9EA),
+            color: isDark ? Colors.white10 : const Color(0xFFDDE6FF),
           ),
         ),
       ),
@@ -58,12 +59,12 @@ class RiverTechBrand {
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return signalTeal;
+          if (states.contains(WidgetState.selected)) return signalBlue;
           return null;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return signalTeal.withValues(alpha: 0.35);
+            return signalBlue.withValues(alpha: 0.35);
           }
           return null;
         }),
@@ -80,7 +81,7 @@ class RiverTechMark extends StatelessWidget {
     super.key,
     this.size = 44,
     this.backgroundColor = Colors.white,
-    this.foregroundColor = RiverTechBrand.signalTeal,
+    this.foregroundColor = RiverTechBrand.signalBlue,
     this.accentColor = RiverTechBrand.deepWater,
   });
 

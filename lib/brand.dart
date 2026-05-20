@@ -14,16 +14,15 @@ class RiverTechBrand {
 
   static ThemeData theme(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
-    final scheme =
-        ColorScheme.fromSeed(
-          seedColor: signalBlue,
-          brightness: brightness,
-        ).copyWith(
-          primary: isDark ? mist : harborBlue,
-          secondary: signalBlue,
-          tertiary: accent,
-          surface: isDark ? const Color(0xFF081A4A) : ice,
-        );
+    final scheme = ColorScheme.fromSeed(
+      seedColor: signalBlue,
+      brightness: brightness,
+    ).copyWith(
+      primary: isDark ? mist : harborBlue,
+      secondary: signalBlue,
+      tertiary: accent,
+      surface: isDark ? const Color(0xFF081A4A) : ice,
+    );
 
     return ThemeData(
       useMaterial3: true,
@@ -33,7 +32,8 @@ class RiverTechBrand {
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
-        backgroundColor: scheme.surface,
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
         foregroundColor: scheme.onSurface,
         titleTextStyle: TextStyle(
           color: scheme.onSurface,
@@ -73,92 +73,5 @@ class RiverTechBrand {
         contentPadding: EdgeInsets.symmetric(horizontal: 16),
       ),
     );
-  }
-}
-
-class RiverTechMark extends StatelessWidget {
-  const RiverTechMark({
-    super.key,
-    this.size = 44,
-    this.backgroundColor = Colors.white,
-    this.foregroundColor = RiverTechBrand.signalBlue,
-    this.accentColor = RiverTechBrand.deepWater,
-  });
-
-  final double size;
-  final Color backgroundColor;
-  final Color foregroundColor;
-  final Color accentColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size.square(size),
-      painter: _RiverTechMarkPainter(
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
-        accentColor: accentColor,
-      ),
-    );
-  }
-}
-
-class _RiverTechMarkPainter extends CustomPainter {
-  const _RiverTechMarkPainter({
-    required this.backgroundColor,
-    required this.foregroundColor,
-    required this.accentColor,
-  });
-
-  final Color backgroundColor;
-  final Color foregroundColor;
-  final Color accentColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final radius = size.width * 0.2;
-    final backgroundPaint = Paint()..color = backgroundColor;
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(rect, Radius.circular(radius)),
-      backgroundPaint,
-    );
-
-    final wavePaint = Paint()
-      ..color = foregroundColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.11
-      ..strokeCap = StrokeCap.round;
-
-    final wave = Path()
-      ..moveTo(size.width * 0.18, size.height * 0.64)
-      ..cubicTo(
-        size.width * 0.36,
-        size.height * 0.38,
-        size.width * 0.56,
-        size.height * 0.72,
-        size.width * 0.82,
-        size.height * 0.42,
-      );
-    canvas.drawPath(wave, wavePaint);
-
-    final nodePaint = Paint()..color = accentColor;
-    canvas.drawCircle(
-      Offset(size.width * 0.34, size.height * 0.43),
-      size.width * 0.105,
-      nodePaint,
-    );
-    canvas.drawCircle(
-      Offset(size.width * 0.69, size.height * 0.58),
-      size.width * 0.085,
-      nodePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _RiverTechMarkPainter oldDelegate) {
-    return oldDelegate.backgroundColor != backgroundColor ||
-        oldDelegate.foregroundColor != foregroundColor ||
-        oldDelegate.accentColor != accentColor;
   }
 }

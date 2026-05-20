@@ -74,6 +74,7 @@ class _MainAppState extends State<MainApp> {
       scaffoldMessengerKey: messengerKey,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      themeMode: ThemeMode.light,
       theme: RiverTechBrand.theme(Brightness.light),
       darkTheme: RiverTechBrand.theme(Brightness.dark),
       home: Stack(children: const [QuickActionsInitializer(), MainScreen()]),

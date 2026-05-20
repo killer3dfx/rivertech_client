@@ -1,19 +1,19 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
+    as bg;
 import 'package:rivertech_client/main.dart';
 import 'package:rivertech_client/password_service.dart';
 import 'package:rivertech_client/preferences.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
-    as bg;
 
 import 'brand.dart';
 import 'l10n/app_localizations.dart';
-import 'status_screen.dart';
 import 'settings_screen.dart';
+import 'status_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -52,186 +52,14 @@ class _MainScreenState extends State<MainScreen> {
 
   Color _trackingStateColor(ColorScheme colors) {
     if (!trackingEnabled) return colors.outline;
-    if (isMoving == false) return colors.tertiary;
+    if (isMoving == false) return RiverTechBrand.accent;
     return colors.secondary;
   }
 
   IconData _trackingStateIcon() {
-    if (!trackingEnabled) return Icons.pause_circle_outline;
-    if (isMoving == false) return Icons.anchor_outlined;
-    return Icons.navigation_outlined;
-  }
-
-  Widget _buildHeader() {
-    final colors = Theme.of(context).colorScheme;
-    final localizations = AppLocalizations.of(context)!;
-    final deviceId = Preferences.instance.getString(Preferences.id) ?? '';
-    final serverUrl = Preferences.instance.getString(Preferences.url) ?? '';
-    final stateColor = _trackingStateColor(colors);
-    final stateLabel = trackingEnabled
-        ? localizations.trackingLabel
-        : localizations.disabledValue;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [RiverTechBrand.deepWater, RiverTechBrand.harborBlue],
-        ),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Image.asset(
-                'assets/brand/rivertech_logo.png',
-                height: 42,
-                fit: BoxFit.contain,
-                alignment: Alignment.centerLeft,
-              ),
-            ),
-            const SizedBox(height: 18),
-            Text(
-              RiverTechBrand.gatewayName,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              RiverTechBrand.appName,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: Colors.white70),
-            ),
-            const SizedBox(height: 18),
-            Row(
-              children: [
-                const RiverTechMark(
-                  size: 42,
-                  foregroundColor: Colors.white,
-                  accentColor: RiverTechBrand.mist,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    AppLocalizations.of(context)!.disclosureMessage,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: Colors.white70),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: [
-                _buildStatusChip(stateColor, stateLabel),
-                _buildHeaderMetric(
-                  Icons.badge_outlined,
-                  localizations.idLabel,
-                  deviceId,
-                ),
-                _buildHeaderMetric(
-                  Icons.dns_outlined,
-                  localizations.urlLabel,
-                  serverUrl,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatusChip(Color stateColor, String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white24),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(_trackingStateIcon(), color: stateColor, size: 18),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeaderMetric(IconData icon, String label, String value) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 148, maxWidth: 320),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: RiverTechBrand.mist, size: 18),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelSmall?.copyWith(color: Colors.white60),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    value,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    if (!trackingEnabled) return Icons.location_disabled_outlined;
+    if (isMoving == false) return Icons.radio_button_checked;
+    return Icons.near_me_outlined;
   }
 
   Future<void> _checkBatteryOptimizations(BuildContext context) async {
@@ -242,19 +70,22 @@ class _MainScreenState extends State<MainScreen> {
         if (!request.seen && context.mounted) {
           showDialog(
             context: context,
-            builder: (_) => AlertDialog(
-              scrollable: true,
-              content: Text(AppLocalizations.of(context)!.optimizationMessage),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    bg.DeviceSettings.show(request);
-                  },
-                  child: Text(AppLocalizations.of(context)!.okButton),
+            builder:
+                (_) => AlertDialog(
+                  scrollable: true,
+                  content: Text(
+                    AppLocalizations.of(context)!.optimizationMessage,
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        bg.DeviceSettings.show(request);
+                      },
+                      child: Text(AppLocalizations.of(context)!.okButton),
+                    ),
+                  ],
                 ),
-              ],
-            ),
           );
         }
       }
@@ -263,130 +94,197 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  Widget _buildTrackingCard() {
+  Future<void> _toggleTracking(bool value) async {
+    if (!await PasswordService.authenticate(context) || !mounted) return;
+    if (value) {
+      try {
+        FirebaseCrashlytics.instance.log('tracking_toggle_start');
+        await bg.BackgroundGeolocation.start();
+        if (mounted) {
+          _checkBatteryOptimizations(context);
+        }
+      } on PlatformException catch (error) {
+        final providerState = await bg.BackgroundGeolocation.providerState;
+        final isPermissionError =
+            providerState.status ==
+                bg.ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED ||
+            providerState.status ==
+                bg.ProviderChangeEvent.AUTHORIZATION_STATUS_RESTRICTED;
+        if (!mounted) return;
+        messengerKey.currentState?.showSnackBar(
+          SnackBar(
+            content: Text(error.message ?? error.code),
+            duration: const Duration(seconds: 4),
+            action:
+                isPermissionError
+                    ? SnackBarAction(
+                      label: AppLocalizations.of(context)!.settingsTitle,
+                      onPressed:
+                          () => AppSettings.openAppSettings(
+                            type: AppSettingsType.settings,
+                          ),
+                    )
+                    : null,
+          ),
+        );
+      }
+    } else {
+      FirebaseCrashlytics.instance.log('tracking_toggle_stop');
+      bg.BackgroundGeolocation.stop();
+    }
+  }
+
+  Future<void> _sendLocation() async {
+    try {
+      await bg.BackgroundGeolocation.getCurrentPosition(
+        samples: 1,
+        persist: true,
+        extras: {'manual': true},
+      );
+    } on PlatformException catch (error) {
+      messengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text(error.message ?? error.code)),
+      );
+    }
+  }
+
+  Future<void> _openSettings() async {
+    if (await PasswordService.authenticate(context) && mounted) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const SettingsScreen()),
+      );
+      setState(() {});
+    }
+  }
+
+  Widget _buildBrandHeader() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Image.asset(
+            'assets/brand/rivertech_logo.png',
+            height: 44,
+            fit: BoxFit.contain,
+            alignment: Alignment.centerLeft,
+          ),
+        ),
+        const SizedBox(width: 16),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.asset(
+            'assets/brand/rivertech_app_icon.png',
+            width: 58,
+            height: 58,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTrackingPanel() {
+    final colors = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
+    final stateColor = _trackingStateColor(colors);
+    final stateLabel =
+        trackingEnabled
+            ? localizations.trackingLabel
+            : localizations.disabledValue;
+
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.sensors_outlined,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: 10),
+                _buildIconBadge(_trackingStateIcon(), stateColor),
+                const SizedBox(width: 14),
                 Expanded(
-                  child: Text(
-                    AppLocalizations.of(context)!.trackingTitle,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        localizations.trackingTitle,
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        stateLabel,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: colors.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                Switch(
+                  value: trackingEnabled,
+                  activeTrackColor:
+                      isMoving == false
+                          ? RiverTechBrand.accent.withValues(alpha: 0.38)
+                          : null,
+                  onChanged: _toggleTracking,
                 ),
               ],
             ),
+            const SizedBox(height: 18),
+            _buildInfoRow(
+              Icons.badge_outlined,
+              localizations.idLabel,
+              Preferences.instance.getString(Preferences.id) ?? '',
+            ),
             const SizedBox(height: 12),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.badge_outlined),
-              title: Text(AppLocalizations.of(context)!.idLabel),
-              subtitle: Text(
-                Preferences.instance.getString(Preferences.id) ?? '',
-              ),
+            _buildInfoRow(
+              Icons.dns_outlined,
+              localizations.urlLabel,
+              Preferences.instance.getString(Preferences.url) ?? '',
             ),
             if (Platform.isAndroid) ...[
+              const SizedBox(height: 16),
               Text(
-                AppLocalizations.of(context)!.disclosureMessage,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(height: 8),
-            ],
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              secondary: Icon(_trackingStateIcon()),
-              title: Text(AppLocalizations.of(context)!.trackingLabel),
-              value: trackingEnabled,
-              activeTrackColor: isMoving == false
-                  ? Theme.of(context).colorScheme.secondary
-                  : null,
-              onChanged: (bool value) async {
-                if (await PasswordService.authenticate(context) && mounted) {
-                  if (value) {
-                    try {
-                      FirebaseCrashlytics.instance.log('tracking_toggle_start');
-                      await bg.BackgroundGeolocation.start();
-                      if (mounted) {
-                        _checkBatteryOptimizations(context);
-                      }
-                    } on PlatformException catch (error) {
-                      final providerState =
-                          await bg.BackgroundGeolocation.providerState;
-                      final isPermissionError =
-                          providerState.status ==
-                              bg
-                                  .ProviderChangeEvent
-                                  .AUTHORIZATION_STATUS_DENIED ||
-                          providerState.status ==
-                              bg
-                                  .ProviderChangeEvent
-                                  .AUTHORIZATION_STATUS_RESTRICTED;
-                      if (!mounted) return;
-                      messengerKey.currentState?.showSnackBar(
-                        SnackBar(
-                          content: Text(error.message ?? error.code),
-                          duration: const Duration(seconds: 4),
-                          action: isPermissionError
-                              ? SnackBarAction(
-                                  label: AppLocalizations.of(
-                                    context,
-                                  )!.settingsTitle,
-                                  onPressed: () => AppSettings.openAppSettings(
-                                    type: AppSettingsType.settings,
-                                  ),
-                                )
-                              : null,
-                        ),
-                      );
-                    }
-                  } else {
-                    FirebaseCrashlytics.instance.log('tracking_toggle_stop');
-                    bg.BackgroundGeolocation.stop();
-                  }
-                }
-              },
-            ),
-            const SizedBox(height: 8),
-            OverflowBar(
-              spacing: 8,
-              children: [
-                FilledButton.tonalIcon(
-                  onPressed: () async {
-                    try {
-                      await bg.BackgroundGeolocation.getCurrentPosition(
-                        samples: 1,
-                        persist: true,
-                        extras: {'manual': true},
-                      );
-                    } on PlatformException catch (error) {
-                      messengerKey.currentState?.showSnackBar(
-                        SnackBar(content: Text(error.message ?? error.code)),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.my_location_outlined),
-                  label: Text(AppLocalizations.of(context)!.locationButton),
+                localizations.disclosureMessage,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: colors.onSurfaceVariant,
+                  height: 1.35,
                 ),
-                FilledButton.tonalIcon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const StatusScreen()),
-                    );
-                  },
-                  icon: const Icon(Icons.receipt_long_outlined),
-                  label: Text(AppLocalizations.of(context)!.statusButton),
+              ),
+            ],
+            const SizedBox(height: 18),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: _sendLocation,
+                    icon: const Icon(Icons.my_location_outlined),
+                    label: Text(
+                      localizations.locationButton,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const StatusScreen()),
+                      );
+                    },
+                    icon: const Icon(Icons.receipt_long_outlined),
+                    label: Text(
+                      localizations.statusButton,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -396,64 +294,92 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildSettingsCard() {
+  Widget _buildSettingsPanel() {
+    final localizations = AppLocalizations.of(context)!;
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.tune_outlined,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    AppLocalizations.of(context)!.settingsTitle,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.dns_outlined),
-              title: Text(AppLocalizations.of(context)!.urlLabel),
-              subtitle: Text(
-                Preferences.instance.getString(Preferences.url) ?? '',
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: _openSettings,
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Row(
+            children: [
+              _buildIconBadge(
+                Icons.tune_outlined,
+                Theme.of(context).colorScheme.primary,
               ),
-            ),
-            const SizedBox(height: 8),
-            OverflowBar(
-              spacing: 8,
-              children: [
-                FilledButton.tonalIcon(
-                  onPressed: () async {
-                    if (await PasswordService.authenticate(context) &&
-                        mounted) {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const SettingsScreen(),
-                        ),
-                      );
-                      setState(() {});
-                    }
-                  },
-                  icon: const Icon(Icons.settings_outlined),
-                  label: Text(AppLocalizations.of(context)!.settingsButton),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      localizations.settingsTitle,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      localizations.settingsButton,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
+              ),
+              const Icon(Icons.chevron_right),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String label, String value) {
+    final colors = Theme.of(context).colorScheme;
+    return Row(
+      children: [
+        Icon(icon, color: colors.primary, size: 22),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: colors.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildIconBadge(IconData icon, Color color) {
+    return Container(
+      width: 42,
+      height: 42,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Icon(icon, color: color, size: 23),
     );
   }
 
@@ -462,14 +388,15 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(RiverTechBrand.appName)),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 28),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(),
-            const SizedBox(height: 16),
-            _buildTrackingCard(),
-            const SizedBox(height: 16),
-            _buildSettingsCard(),
+            _buildBrandHeader(),
+            const SizedBox(height: 24),
+            _buildTrackingPanel(),
+            const SizedBox(height: 12),
+            _buildSettingsPanel(),
           ],
         ),
       ),

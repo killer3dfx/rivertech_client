@@ -25,8 +25,14 @@ Future<void> _generateIcons(String icon) async {
   dir.deleteSync(recursive: true);
   dir.createSync();
 
-  File('android/app/src/main/res/drawable/ic_launcher_foreground.xml').delete();
-  File('android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml').delete();
+  final foreground = File(
+    'android/app/src/main/res/drawable/ic_launcher_foreground.xml',
+  );
+  if (foreground.existsSync()) foreground.deleteSync();
+  final adaptiveIcon = File(
+    'android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml',
+  );
+  if (adaptiveIcon.existsSync()) adaptiveIcon.deleteSync();
 
   final f = await _writeTempYaml('flutter_launcher_icons.yaml', '''
 flutter_launcher_icons:
@@ -40,7 +46,10 @@ flutter_launcher_icons:
 
   await _replaceInFile(
     'android/app/src/main/AndroidManifest.xml',
-    RegExp(r'\s*<meta-data\s+android:name="com\.google\.firebase\.messaging\.default_notification_icon"[\s\S]*?/>', multiLine: true),
+    RegExp(
+      r'\s*<meta-data\s+android:name="com\.google\.firebase\.messaging\.default_notification_icon"[\s\S]*?/>',
+      multiLine: true,
+    ),
     '',
   );
 }
@@ -93,14 +102,22 @@ Future<void> _createKeystore() async {
   final args = [
     '-genkeypair',
     '-v',
-    '-keystore', keystoreFilePath,
-    '-alias', keystoreAlias,
-    '-keyalg', 'RSA',
-    '-keysize', '2048',
-    '-validity', '10000',
-    '-storepass', keystorePassword,
-    '-keypass', keystorePassword,
-    '-dname', 'CN=Brand, OU=Dev, O=Company, L=City, S=State, C=US',
+    '-keystore',
+    keystoreFilePath,
+    '-alias',
+    keystoreAlias,
+    '-keyalg',
+    'RSA',
+    '-keysize',
+    '2048',
+    '-validity',
+    '10000',
+    '-storepass',
+    keystorePassword,
+    '-keypass',
+    keystorePassword,
+    '-dname',
+    'CN=Brand, OU=Dev, O=Company, L=City, S=State, C=US',
   ];
   await _run('keytool', args);
 
@@ -126,7 +143,11 @@ Future<File> _writeTempYaml(String name, String content) async {
   return file;
 }
 
-Future<void> _replaceInFile(String path, RegExp pattern, String replacement) async {
+Future<void> _replaceInFile(
+  String path,
+  RegExp pattern,
+  String replacement,
+) async {
   final file = File(path);
   if (!await file.exists()) return;
   final text = await file.readAsString();
